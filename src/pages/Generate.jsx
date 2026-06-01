@@ -7,6 +7,7 @@ function Generate() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [generatedQuestions, setGeneratedQuestions] = useState(null);
+  const [showMarkingScheme, setShowMarkingScheme] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,6 +52,16 @@ function Generate() {
       });
       setIsLoading(false);
     }, 2000);
+  };
+
+  const exportToPDF = () => {
+    if (!generatedQuestions) return;
+    alert("PDF export feature will be implemented with a PDF library like jsPDF or react-pdf");
+  };
+
+  const exportToWord = () => {
+    if (!generatedQuestions) return;
+    alert("Word export feature will be implemented with a Word library like docx");
   };
 
   return (
@@ -143,74 +154,197 @@ function Generate() {
               </p>
             </div>
 
-            {generatedQuestions.questions.map((q, index) => (
-              <div
-                key={q.id}
-                className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-slate-700 transition-all"
+            {/* View Toggle */}
+            <div className="flex gap-4 justify-center mb-8">
+              <button
+                onClick={() => setShowMarkingScheme(false)}
+                className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                  !showMarkingScheme
+                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-950/50"
+                    : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                }`}
               >
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600/20 border border-indigo-500/30">
-                      <span className="text-indigo-400 font-bold text-sm">{index + 1}</span>
-                    </div>
-                  </div>
-                  <div className="flex-grow">
-                    <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-lg font-semibold text-white flex-grow">
-                        {q.question}
-                      </h3>
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                        {q.type === "multiple-choice"
-                          ? "MCQ"
-                          : q.type === "essay"
-                          ? "Essay"
-                          : "Short Answer"}
-                      </span>
-                    </div>
+                Questions
+              </button>
+              <button
+                onClick={() => setShowMarkingScheme(true)}
+                className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                  showMarkingScheme
+                    ? "bg-purple-600 text-white shadow-lg shadow-purple-950/50"
+                    : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                }`}
+              >
+                Marking Scheme
+              </button>
+            </div>
 
-                    {q.type === "multiple-choice" && q.options && (
-                      <div className="space-y-2 ml-2">
-                        {q.options.map((option, optIndex) => (
-                          <div
-                            key={optIndex}
-                            className="flex items-center gap-3 p-2 rounded-lg bg-slate-950/50 border border-slate-800 hover:border-slate-700 transition-all cursor-pointer"
-                          >
-                            <input
-                              type="radio"
-                              name={`question-${q.id}`}
-                              className="w-4 h-4 cursor-pointer"
-                              disabled
-                            />
-                            <label className="flex-grow cursor-pointer text-slate-300">
-                              {option}
-                            </label>
-                          </div>
-                        ))}
+            {/* Questions View */}
+            {!showMarkingScheme && (
+              <div className="space-y-6">
+                {generatedQuestions.questions.map((q, index) => (
+                  <div
+                    key={q.id}
+                    className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-slate-700 transition-all"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600/20 border border-indigo-500/30">
+                          <span className="text-indigo-400 font-bold text-sm">{index + 1}</span>
+                        </div>
                       </div>
-                    )}
+                      <div className="flex-grow">
+                        <div className="flex items-center gap-3 mb-3">
+                          <h3 className="text-lg font-semibold text-white flex-grow">
+                            {q.question}
+                          </h3>
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                            {q.type === "multiple-choice"
+                              ? "MCQ"
+                              : q.type === "essay"
+                              ? "Essay"
+                              : "Short Answer"}
+                          </span>
+                        </div>
 
-                    {(q.type === "essay" || q.type === "short-answer") && (
-                      <textarea
-                        rows="3"
-                        disabled
-                        placeholder="Student answer space..."
-                        className="w-full mt-3 bg-slate-950/50 border border-slate-800 rounded-lg px-4 py-3 text-slate-500 placeholder-slate-600 focus:outline-none resize-none"
-                      />
-                    )}
+                        {q.type === "multiple-choice" && q.options && (
+                          <div className="space-y-2 ml-2">
+                            {q.options.map((option, optIndex) => (
+                              <div
+                                key={optIndex}
+                                className="flex items-center gap-3 p-2 rounded-lg bg-slate-950/50 border border-slate-800 hover:border-slate-700 transition-all cursor-pointer"
+                              >
+                                <input
+                                  type="radio"
+                                  name={`question-${q.id}`}
+                                  className="w-4 h-4 cursor-pointer"
+                                  disabled
+                                />
+                                <label className="flex-grow cursor-pointer text-slate-300">
+                                  {option}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {(q.type === "essay" || q.type === "short-answer") && (
+                          <textarea
+                            rows="3"
+                            disabled
+                            placeholder="Student answer space..."
+                            className="w-full mt-3 bg-slate-950/50 border border-slate-800 rounded-lg px-4 py-3 text-slate-500 placeholder-slate-600 focus:outline-none resize-none"
+                          />
+                        )}
+                      </div>
+                    </div>
                   </div>
+                ))}
+              </div>
+            )}
+
+            {/* Marking Scheme View */}
+            {showMarkingScheme && (
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/30 rounded-xl p-6">
+                  <h3 className="text-2xl font-bold text-white mb-6">Marking Scheme</h3>
+                  
+                  {generatedQuestions.questions.map((q, index) => (
+                    <div key={q.id} className="mb-8 pb-8 border-b border-slate-700 last:border-b-0 last:mb-0 last:pb-0">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple-600/30 border border-purple-500/50">
+                            <span className="text-purple-300 font-bold text-sm">{index + 1}</span>
+                          </div>
+                        </div>
+                        <div className="flex-grow">
+                          <h4 className="text-lg font-semibold text-white mb-3">
+                            {q.question}
+                          </h4>
+                          
+                          {q.type === "multiple-choice" && (
+                            <div>
+                              <div className="bg-emerald-600/20 border border-emerald-500/30 rounded-lg p-4 mb-3">
+                                <p className="text-emerald-300 font-semibold">Correct Answer: <span className="text-emerald-200">Option B</span></p>
+                                <p className="text-slate-300 text-sm mt-2">This option accurately represents the primary concept.</p>
+                              </div>
+                              <div className="text-slate-300">
+                                <p className="font-medium mb-2 text-slate-200">Marking Points:</p>
+                                <ul className="list-disc list-inside space-y-1 text-sm text-slate-400">
+                                  <li>Correct answer: 1 mark</li>
+                                  <li>Incorrect or no answer: 0 marks</li>
+                                </ul>
+                              </div>
+                            </div>
+                          )}
+
+                          {q.type === "essay" && (
+                            <div>
+                              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-3">
+                                <p className="text-slate-200 font-medium mb-2">Marking Criteria:</p>
+                                <ul className="space-y-2 text-sm text-slate-300">
+                                  <li><span className="font-medium">Content Accuracy (0-3 marks):</span> How well the student explains the importance</li>
+                                  <li><span className="font-medium">Clarity (0-2 marks):</span> Coherence and organization of thoughts</li>
+                                  <li><span className="font-medium">Examples (0-2 marks):</span> Relevant practical examples provided</li>
+                                  <li><span className="font-medium">Grammar (0-1 mark):</span> Language and presentation</li>
+                                </ul>
+                              </div>
+                              <p className="text-slate-300"><span className="font-medium">Total: 8 marks</span></p>
+                            </div>
+                          )}
+
+                          {q.type === "short-answer" && (
+                            <div>
+                              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-3">
+                                <p className="text-slate-200 font-medium mb-2">Acceptable Answer Key:</p>
+                                <p className="text-slate-300">Students should mention the connection between the concept and real-world scenarios, with specific examples and clear explanation.</p>
+                              </div>
+                              <div className="text-slate-300">
+                                <p className="font-medium mb-2 text-slate-200">Marking Points:</p>
+                                <ul className="list-disc list-inside space-y-1 text-sm text-slate-400">
+                                  <li>Clear relationship identified: 1 mark</li>
+                                  <li>Example provided: 1 mark</li>
+                                  <li>Explanation: 1 mark</li>
+                                  <li>Total: 3 marks</li>
+                                </ul>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
+            )}
 
             {/* Export/Download Options */}
-            <div className="flex flex-wrap gap-4 justify-center pt-8">
-              <button className="px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-all">
+            <div className="flex flex-wrap gap-4 justify-center pt-8 border-t border-slate-800">
+              <button
+                onClick={exportToPDF}
+                className="flex items-center gap-2 px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-all transform hover:-translate-y-0.5"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
                 Download as PDF
               </button>
-              <button className="px-6 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 font-medium border border-slate-700 transition-all">
-                Copy to Clipboard
+              <button
+                onClick={exportToWord}
+                className="flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium transition-all transform hover:-translate-y-0.5"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download as Word
               </button>
-              <button className="px-6 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 font-medium border border-slate-700 transition-all">
+              <button
+                onClick={() => {
+                  setGeneratedQuestions(null);
+                  setFormData({ subject: "", topic: "" });
+                  setShowMarkingScheme(false);
+                }}
+                className="px-6 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 font-medium border border-slate-700 transition-all transform hover:-translate-y-0.5"
+              >
                 Generate New
               </button>
             </div>
