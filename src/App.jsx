@@ -1,39 +1,49 @@
-﻿import { useState } from "react";
-import heroImg from "./assets/hero.png";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import "./App.css";
+﻿import heroImg from "./assets/hero.png";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <Navbar />
       <main className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-white py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-block mb-8">
-              <img src={heroImg} className="base" width="170" height="179" alt="" />
-              <img src={reactLogo} className="framework" alt="React logo" />
-              <img src={viteLogo} className="vite" alt="Vite logo" />
+        {/* Hero Section - AI Exam Generator */}
+        <section className="bg-white py-20 lg:py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              {/* Hero Content */}
+              <div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    AI-Powered Exam Generation
+                  </span>
+                  <br />
+                  <span className="text-gray-800">Made Simple</span>
+                </h1>
+                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                  Transform your assessment workflow with our intelligent platform.
+                  Generate curriculum-aligned questions, quizzes, and marking schemes
+                  in seconds using advanced AI technology designed for educators.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105">
+                    Get Started Free
+                  </button>
+                  <button className="border border-gray-300 text-gray-700 font-semibold py-3 px-8 rounded-xl hover:bg-gray-50 transition-all duration-300">
+                    Watch Demo
+                  </button>
+                </div>
+              </div>
+              {/* Hero Image */}
+              <div className="relative">
+                <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-3xl blur-xl"></div>
+                <img
+                  src={heroImg}
+                  alt="AI Education Platform"
+                  className="relative rounded-2xl shadow-2xl w-full object-cover transform transition-transform duration-500 hover:scale-105"
+                />
+              </div>
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Get started
-            </h1>
-            <p className="text-lg text-gray-600 mb-8">
-              Edit <code className="bg-gray-100 px-1 rounded">src/App.jsx</code> and save to test <code className="bg-gray-100 px-1 rounded">HMR</code>
-            </p>
-            <button
-              type="button"
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() => setCount((count) => count + 1)}
-            >
-              Count is {count}
-            </button>
           </div>
         </section>
 
