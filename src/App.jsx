@@ -37,77 +37,124 @@ function App() {
           </div>
         </section>
 
-        {/* Mission Section */}
-        <section className="bg-white py-16">
+{/* Mission Section - Image Left, Content Right */}
+        <section className="bg-white py-20 lg:py-24 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-              Our Mission
-            </h2>
-            <p className="text-lg text-gray-600 text-center max-w-2xl mx-auto">
-              We are dedicated to providing innovative solutions that empower
-              individuals and organizations to achieve their goals through
-              cutting-edge technology and exceptional service.
-            </p>
-          </div>
-        </section>
-
-        {/* About Us Section */}
-        <section className="bg-white py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-              About Us
-            </h2>
-            <div className="grid gap-12 md:grid-cols-2">
-              {/* Image on left, text on right */}
-              <div>
-                <img
-                  src={heroImg}
-                  alt="About Us"
-                  className="rounded-lg shadow-lg h-96 w-full object-cover"
-                />
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              {/* Image */}
+              <div className="order-2 lg:order-1 animate-fade-in-left">
+                <div className="relative group">
+                  <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+                  <img
+                    src={heroImg}
+                    alt="AI Education Technology"
+                    className="relative rounded-2xl shadow-xl h-80 w-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
               </div>
-              <div className="space-y-6">
-                <h3 className="text-2xl font-semibold text-gray-900">
-                  Who We Are
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  We are a passionate team of developers, designers, and
-                  innovators committed to excellence in everything we do.
+              {/* Content */}
+              <div className="order-1 lg:order-2 animate-fade-in-right">
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Our Mission
+                </h2>
+                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                  We empower educators to focus on what matters most - teaching and inspiring students.
+                  Our AI Exam Generator transforms hours of manual assessment creation into minutes,
+                  delivering professional, curriculum-aligned questions and marking schemes that enhance
+                  learning outcomes while reducing workload.
                 </p>
-                <p className="text-gray-600 leading-relaxed">
-                  Founded in 2026, we've grown from a small startup to a
-                  leading provider of digital solutions.
-                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+                      <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3"></path>
+                        <circle cx="12" cy="12" r="10"></circle>
+                      </svg>
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Save Time</h3>
+                    <p className="text-sm text-gray-600">Automate assessment creation in seconds</p>
+                  </div>
+                  <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
+                      <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 7.835A7 7 0 1012 3v0"></path>
+                      </svg>
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Improve Quality</h3>
+                    <p className="text-sm text-gray-600">AI-powered assessment accuracy</p>
+                  </div>
+                  <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-3">
+                      <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-3-3h-4m-5 0H4a3 3 0 00-3 3v2h5m5 0v-2a3 3 0 013-3h4a3 3 0 013 3v2"></path>
+                      </svg>
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Empower Educators</h3>
+                    <p className="text-sm text-gray-600">Smart tools for modern teaching</p>
+                  </div>
+                  <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mb-3">
+                      <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                      </svg>
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Student Success</h3>
+                    <p className="text-sm text-gray-600">Enhanced learning outcomes</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Alternate About Us Section - Image on right, text on left */}
-        <section className="bg-gray-50 py-16">
+        {/* About Us Section - Content Left, Image Right */}
+        <section className="bg-gray-50 py-20 lg:py-24 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-12 md:grid-cols-2">
-              {/* Text on left, image on right */}
-              <div className="space-y-6">
-                <h3 className="text-2xl font-semibold text-gray-900">
-                  What We Do
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  We specialize in creating user-friendly applications that
-                  solve real-world problems. Our expertise spans web
-                  development, mobile apps, and AI-powered solutions.
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              {/* Content */}
+              <div className="animate-fade-in-left">
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  About Us
+                </h2>
+                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                  AI Exam Generator was founded by educators and technologists who understood the
+                  challenge of creating quality assessments at scale. Our platform serves teachers,
+                  schools, institutions, and training centers worldwide, generating professional
+                  exam questions, quizzes, and marking schemes powered by advanced artificial intelligence.
                 </p>
-                <p className="text-gray-600 leading-relaxed">
-                  Our client-centered approach ensures we deliver solutions
-                  that not only meet but exceed expectations.
+                <p className="text-lg text-gray-600 mb-10 leading-relaxed">
+                  We combine educational expertise with cutting-edge technology to deliver reliable,
+                  accurate, and efficient assessment solutions that educators trust and students love.
                 </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                    <h3 className="font-semibold text-gray-900 mb-2">Innovation</h3>
+                    <p className="text-sm text-gray-600">Pioneering AI in education</p>
+                  </div>
+                  <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                    <h3 className="font-semibold text-gray-900 mb-2">Educational Excellence</h3>
+                    <p className="text-sm text-gray-600">Evidence-based assessment design</p>
+                  </div>
+                  <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                    <h3 className="font-semibold text-gray-900 mb-2">Reliability</h3>
+                    <p className="text-sm text-gray-600">Trusted by educators worldwide</p>
+                  </div>
+                  <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                    <h3 className="font-semibold text-gray-900 mb-2">User Success</h3>
+                    <p className="text-sm text-gray-600">Your achievements are our priority</p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <img
-                  src={heroImg}
-                  alt="What We Do"
-                  className="rounded-lg shadow-lg h-96 w-full object-cover"
-                />
+              {/* Image */}
+              <div className="animate-fade-in-right">
+                <div className="relative group">
+                  <div className="absolute -inset-4 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-3xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+                  <img
+                    src={heroImg}
+                    alt="AI Education Platform"
+                    className="relative rounded-2xl shadow-xl h-80 w-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
               </div>
             </div>
           </div>
