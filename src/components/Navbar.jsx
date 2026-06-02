@@ -53,12 +53,12 @@ function Navbar() {
         <Link to="/login" className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-indigo-500">Login</Link>
 
         <div className={`mobile-bottom ${bottomNavClass}`}>
-          <a href="#" className="nav-item">
+          <Link to="/" className="nav-item">
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1V9.5z" />
             </svg>
             <span className="text-[11px] uppercase tracking-[0.18em]">Home</span>
-          </a>
+          </Link>
 
           <a href="#about" className="nav-item">
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

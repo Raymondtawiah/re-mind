@@ -116,12 +116,9 @@ function Login() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
             <button className="w-full px-4 py-2 rounded-lg border border-slate-700 bg-slate-950/50 text-slate-100 hover:bg-slate-800 transition-all text-sm font-medium">
               Google
-            </button>
-            <button className="w-full px-4 py-2 rounded-lg border border-slate-700 bg-slate-950/50 text-slate-100 hover:bg-slate-800 transition-all text-sm font-medium">
-              GitHub
             </button>
           </div>
 
