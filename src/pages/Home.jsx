@@ -17,12 +17,12 @@ function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white pb-24 md:pb-0 pt-16 md:pt-0">
+    <main className="min-h-screen bg-slate-950 text-white pb-24 md:pb-0 pt-16 md:pt-0 overflow-x-hidden">
       {/* Hero section needs proper background */}
       <header className="relative relative overflow-hidden pt-24 pb-20 lg:pt-32 lg:pb-28">
         {/* Ambient background glows */}
         <div className="absolute top-0 left-1/4 -translate-x-1/2 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute top-20 right-1/4 translate-x-1/2 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-20 right-6 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
@@ -334,8 +334,8 @@ function Home() {
       </section>
 
       {/* 6. MODERN CONTACT SECTION */}
-      <section id="generate" className="py-20 lg:py-28 relative">
-        <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <section id="generate" className="py-20 lg:py-28 relative overflow-x-hidden">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative bg-gradient-to-b from-slate-800/80 to-slate-900/80 border border-slate-700/80 rounded-2xl p-8 sm:p-12 backdrop-blur-lg shadow-2xl overflow-hidden">
