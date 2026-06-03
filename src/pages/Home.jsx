@@ -1,4 +1,5 @@
 import heroImg from "../assets/hero.png";
+import aiImg from "../assets/ai.png";
 import { useState } from "react";
 
 function Home() {
@@ -56,11 +57,11 @@ function Home() {
               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-2xl opacity-10 blur-xl"></div>
               <div className="relative bg-slate-800/50 border border-slate-700/60 rounded-2xl p-4 sm:p-6 backdrop-blur-md shadow-2xl">
                 {/* Hero Placeholder Image */}
-                <img 
-                  src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" 
-                  alt="AI Exam Generator Dashboard interface abstract concept" 
-                  className="rounded-xl w-full h-auto object-cover border border-slate-700"
-                />
+<img 
+  src={aiImg} 
+  alt="AI Exam Generator Dashboard interface abstract concept" 
+  className="rounded-xl w-full h-auto object-cover border border-slate-700"
+/>
               </div>
             </div>
 
@@ -149,53 +150,53 @@ function Home() {
         </div>
       </section>
 
-      {/* 4. ABOUT US SECTION (Text Left, Image Right) */}
-      <section id="about" className="py-20 lg:py-28 bg-slate-950/20 relative">
-        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Text Left */}
-            <div className="lg:col-span-7 space-y-6">
-              <h2 className="text-xs font-bold tracking-widest text-purple-400 uppercase">About Us</h2>
-              <p className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-                Engineered by Educators, Perfected by AI Engineers
-              </p>
-              <p className="text-slate-300 leading-relaxed">
-                Founded by a dedicated collective of machine learning researchers and former university faculty, our platform bridges traditional Bloom's Taxonomy principles with custom-trained Large Language Models. We meticulously optimize for psychometric validation, anti-bias content framing, and accurate rubric structures, ensuring your tests are instantly ready for distribution.
-              </p>
-              
-              {/* Glassmorphism Feature Cards Grid */}
-              <div className="grid sm:grid-cols-2 gap-4 pt-4">
-                <div className="p-4 bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm rounded-xl">
-                  <h3 className="font-semibold text-white">Bloom's Taxonomy Fitted</h3>
-                  <p className="text-sm text-slate-400 mt-1">Calibrate questions from basic recall to complex analytical thinking evaluation.</p>
-                </div>
-                <div className="p-4 bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm rounded-xl">
-                  <h3 className="font-semibold text-white">Export Anywhere</h3>
-                  <p className="text-sm text-slate-400 mt-1">Seamless formats matching Canvas, Blackboard, Moodle, or standalone clean PDFs.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Image Right */}
-            <div className="lg:col-span-5">
-              <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-35 transition duration-500"></div>
-                <div className="relative bg-slate-800 border border-slate-700/70 rounded-2xl overflow-hidden shadow-xl">
-                  <img 
-                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80" 
-                    alt="Collaborative workspace designing modern machine learning education frameworks" 
-                    className="w-full h-80 object-cover transform group-hover:scale-105 transition duration-500"
-                  />
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
+       {/* 4. ABOUT US SECTION (Text Left, Image Right) */}
+       <section id="about" className="py-20 lg:py-28 bg-slate-950/20 relative">
+         <div className="absolute top-1/2 right-0 -translate-y-1/2 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+         
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <div className="grid lg:grid-cols-12 gap-12 items-center">
+             
+             {/* Text Left */}
+             <div className="lg:col-span-7 space-y-6">
+               <h2 className="text-xs font-bold tracking-widest text-purple-400 uppercase">About Us</h2>
+               <p className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+                 Empowering Global Education Through AI
+               </p>
+               <p className="text-slate-300 leading-relaxed">
+                 re-mind is an innovative edtech company dedicated to helping schools worldwide harness the power of artificial intelligence to generate high-quality, curriculum-aligned questions and assessments. Our platform enables educators to efficiently evaluate student performance, track learning progress, and personalize instruction. By automating question generation and providing insightful analytics, we empower teachers to focus on what matters most — fostering student growth and success across diverse educational landscapes.
+               </p>
+               
+               {/* Glassmorphism Feature Cards Grid */}
+               <div className="grid sm:grid-cols-2 gap-4 pt-4">
+                 <div className="p-4 bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm rounded-xl">
+                   <h3 className="font-semibold text-white">Bloom's Taxonomy Fitted</h3>
+                   <p className="text-sm text-slate-400 mt-1">Calibrate questions from basic recall to complex analytical thinking evaluation.</p>
+                 </div>
+                 <div className="p-4 bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm rounded-xl">
+                   <h3 className="font-semibold text-white">Export Anywhere</h3>
+                   <p className="text-sm text-slate-400 mt-1">Seamless formats matching Canvas, Blackboard, Moodle, or standalone clean PDFs.</p>
+                 </div>
+               </div>
+             </div>
+ 
+             {/* Image Right */}
+             <div className="lg:col-span-5">
+               <div className="relative group">
+                 <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-35 transition duration-500"></div>
+                 <div className="relative bg-slate-800 border border-slate-700/70 rounded-2xl overflow-hidden shadow-xl">
+                   <img 
+                     src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80" 
+                     alt="Collaborative workspace designing modern machine learning education frameworks" 
+                     className="w-full h-80 object-cover transform group-hover:scale-105 transition duration-500"
+                   />
+                 </div>
+               </div>
+             </div>
+ 
+           </div>
+         </div>
+       </section>
 
       {/* 5. PRICING PLANS SECTION */}
       <section className="py-20 lg:py-28 relative">
