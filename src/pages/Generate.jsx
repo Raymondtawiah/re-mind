@@ -4,6 +4,8 @@ function Generate() {
   const [formData, setFormData] = useState({
     subject: "",
     topic: "",
+    classLevel: "",
+    country: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [generatedQuestions, setGeneratedQuestions] = useState(null);
@@ -17,42 +19,47 @@ function Generate() {
     }));
   };
 
-  const handleGenerateQuestions = async (e) => {
-    e.preventDefault();
-    if (!formData.subject.trim() || !formData.topic.trim()) {
-      alert("Please fill in both Subject and Topic");
-      return;
-    }
+   const handleGenerateQuestions = async (e) => {
+     e.preventDefault();
+     if (!formData.subject.trim() || !formData.topic.trim() || !formData.classLevel.trim() || !formData.country.trim()) {
+       alert("Please fill in all fields: Subject, Topic, Class Level, and Country");
+       return;
+     }
 
-    setIsLoading(true);
-    
-    // Simulate AI generation - replace with actual API call
-    setTimeout(() => {
-      setGeneratedQuestions({
-        subject: formData.subject,
-        topic: formData.topic,
-        questions: [
-          {
-            id: 1,
-            question: `What is the primary concept of ${formData.topic} in ${formData.subject}?`,
-            type: "multiple-choice",
-            options: ["Option A", "Option B", "Option C", "Option D"],
-          },
-          {
-            id: 2,
-            question: `Explain the importance of ${formData.topic} in ${formData.subject}.`,
-            type: "essay",
-          },
-          {
-            id: 3,
-            question: `How does ${formData.topic} relate to real-world applications in ${formData.subject}?`,
-            type: "short-answer",
-          },
-        ],
-      });
-      setIsLoading(false);
-    }, 2000);
-  };
+     setIsLoading(true);
+     
+     // Simulate AI generation - replace with actual API call
+     setTimeout(() => {
+       setGeneratedQuestions({
+         subject: formData.subject,
+         topic: formData.topic,
+         classLevel: formData.classLevel,
+         country: formData.country,
+         questions: [
+           {
+             id: 1,
+             question: `What is the primary concept of ${formData.topic} in ${formData.subject} for ${formData.classLevel} students in ${formData.country}?`,
+             type: "multiple-choice",
+             options: ["Option A", "Option B", "Option C", "Option D"],
+             markingScheme: `Correct Answer: Option B. Explanation: This option correctly identifies the primary concept of ${formData.topic} in ${formData.subject} as per the ${formData.country}'s ${formData.classLevel} curriculum. Marking: 1 mark for correct answer, 0 for incorrect.`,
+           },
+           {
+             id: 2,
+             question: `Explain the importance of ${formData.topic} in ${formData.subject} for ${formData.classLevel} level in ${formData.country}'s educational context.`,
+             type: "essay",
+             markingScheme: `Marking Criteria for ${formData.topic} in ${formData.subject}:\n- Content Accuracy (0-3 marks): Explanation of importance with relevant facts.\n- Understanding of Context (0-2 marks): Relation to ${formData.country}'s educational setting.\n- Examples (0-2 marks): Use of relevant examples.\n- Communication (0-1 mark): Clarity and coherence.\nTotal: 8 marks.`,
+           },
+           {
+             id: 3,
+             question: `How does ${formData.topic} relate to real-world applications in ${formData.subject} considering ${formData.country}'s educational curriculum?`,
+             type: "short-answer",
+             markingScheme: `Acceptable Answer Key: Students should mention at least one real-world application of ${formData.topic} in ${formData.subject} that is relevant to ${formData.country}. Marking: 1 mark for identifying a real-world application, 1 mark for explaining the connection, 1 mark for providing a specific example from ${formData.country}'s context. Total: 3 marks.`,
+           },
+         ],
+       });
+       setIsLoading(false);
+     }, 2000);
+   };
 
   const exportToPDF = () => {
     if (!generatedQuestions) return;
@@ -67,54 +74,144 @@ function Generate() {
   return (
     <main className="min-h-screen bg-slate-950 text-white pb-24 md:pb-0 pt-20 md:pt-0">
       <div className="max-w-4xl mx-auto px-4 py-12">
-        {/* Header Section */}
-        <div className="text-center mb-12 pt-8">
-          <h1 className="text-5xl sm:text-6xl font-extrabold mb-4 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            AI Question Generator
-          </h1>
-          <p className="text-slate-300 text-lg max-w-2xl mx-auto">
-            Enter your subject and topic, and let our advanced AI generate comprehensive, curriculum-aligned questions for your assessment.
-          </p>
-        </div>
+         {/* Header Section */}
+         <div className="text-center mb-12 pt-8">
+           <h1 className="text-5xl sm:text-6xl font-extrabold mb-4 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+             AI Question Generator
+           </h1>
+           <p className="text-slate-300 text-lg max-w-2xl mx-auto">
+             Enter your subject, topic, class/grade level, and country to generate comprehensive, curriculum-aligned questions tailored to your students' needs and local educational context.
+           </p>
+         </div>
 
-        {/* Generate Form */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl mb-8">
-          <form onSubmit={handleGenerateQuestions} className="space-y-8">
-            <div className="grid sm:grid-cols-2 gap-8">
-              {/* Subject Input */}
-              <div>
-                <label htmlFor="subject" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  required
-                  value={formData.subject}
-                  onChange={handleChange}
-                  placeholder="e.g., Mathematics, Biology, History"
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                />
-              </div>
+         {/* Generate Form */}
+         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl mb-8">
+           <form onSubmit={handleGenerateQuestions} className="space-y-8">
+             <div className="grid sm:grid-cols-2 gap-8">
+               {/* Subject Input */}
+               <div>
+                 <label htmlFor="subject" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                   Subject
+                 </label>
+                 <input
+                   type="text"
+                   id="subject"
+                   name="subject"
+                   required
+                   value={formData.subject}
+                   onChange={handleChange}
+                   placeholder="e.g., Mathematics, Biology, History"
+                   className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                 />
+               </div>
 
-              {/* Topic Input */}
-              <div>
-                <label htmlFor="topic" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                  Topic
-                </label>
-                <input
-                  type="text"
-                  id="topic"
-                  name="topic"
-                  required
-                  value={formData.topic}
-                  onChange={handleChange}
-                  placeholder="e.g., Calculus, Photosynthesis, World War II"
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                />
-              </div>
-            </div>
+               {/* Topic Input */}
+               <div>
+                 <label htmlFor="topic" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                   Topic
+                 </label>
+                 <input
+                   type="text"
+                   id="topic"
+                   name="topic"
+                   required
+                   value={formData.topic}
+                   onChange={handleChange}
+                   placeholder="e.g., Calculus, Photosynthesis, World War II"
+                   className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                 />
+               </div>
+
+               {/* Class Level Input */}
+               <div>
+                 <label htmlFor="classLevel" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                   Class/Grade Level
+                 </label>
+                 <select
+                   id="classLevel"
+                   name="classLevel"
+                   required
+                   value={formData.classLevel}
+                   onChange={handleChange}
+                   className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                 >
+                   <option value="">Select Class Level</option>
+                   <option value="Grade 1">Grade 1</option>
+                   <option value="Grade 2">Grade 2</option>
+                   <option value="Grade 3">Grade 3</option>
+                   <option value="Grade 4">Grade 4</option>
+                   <option value="Grade 5">Grade 5</option>
+                   <option value="Grade 6">Grade 6</option>
+                   <option value="Grade 7">Grade 7</option>
+                   <option value="Grade 8">Grade 8</option>
+                   <option value="Grade 9">Grade 9</option>
+                   <option value="Grade 10">Grade 10</option>
+                   <option value="Grade 11">Grade 11</option>
+                   <option value="Grade 12">Grade 12</option>
+                   <option value="Primary 1">Primary 1</option>
+                   <option value="Primary 2">Primary 2</option>
+                   <option value="Primary 3">Primary 3</option>
+                   <option value="Primary 4">Primary 4</option>
+                   <option value="Primary 5">Primary 5</option>
+                   <option value="Primary 6">Primary 6</option>
+                   <option value="Year 1">Year 1</option>
+                   <option value="Year 2">Year 2</option>
+                   <option value="Year 3">Year 3</option>
+                   <option value="Year 4">Year 4</option>
+                   <option value="Year 5">Year 5</option>
+                   <option value="Year 6">Year 6</option>
+                   <option value="Year 7">Year 7</option>
+                   <option value="Year 8">Year 8</option>
+                   <option value="Year 9">Year 9</option>
+                   <option value="Year 10">Year 10</option>
+                   <option value="Year 11">Year 11</option>
+                   <option value="Year 12">Year 12</option>
+                   <option value="Freshman">Freshman</option>
+                   <option value="Sophomore">Sophomore</option>
+                   <option value="Junior">Junior</option>
+                   <option value="Senior">Senior</option>
+                 </select>
+               </div>
+
+               {/* Country Input */}
+               <div>
+                 <label htmlFor="country" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                   Country
+                 </label>
+                 <select
+                   id="country"
+                   name="country"
+                   required
+                   value={formData.country}
+                   onChange={handleChange}
+                   className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                 >
+                   <option value="">Select Country</option>
+                   <option value="United States">United States</option>
+                   <option value="United Kingdom">United Kingdom</option>
+                   <option value="Canada">Canada</option>
+                   <option value="Australia">Australia</option>
+                   <option value="Germany">Germany</option>
+                   <option value="France">France</option>
+                   <option value="India">India</option>
+                   <option value="Nigeria">Nigeria</option>
+                   <option value="Kenya">Kenya</option>
+                   <option value="South Africa">South Africa</option>
+                   <option value="Brazil">Brazil</option>
+                   <option value="Japan">Japan</option>
+                   <option value="China">China</option>
+                   <option value="Singapore">Singapore</option>
+                   <option value="Finland">Finland</option>
+                   <option value="Netherlands">Netherlands</option>
+                   <option value="Sweden">Sweden</option>
+                   <option value="Norway">Norway</option>
+                   <option value="UAE">UAE</option>
+                   <option value="Saudi Arabia">Saudi Arabia</option>
+                   <option value="Egypt">Egypt</option>
+                   <option value="Other">Other</option>
+                 </select>
+               </div>
+             </div>
 
             {/* AI Submit Button */}
             <div className="flex justify-center pt-6">
@@ -147,12 +244,15 @@ function Generate() {
         {/* Generated Questions Display */}
         {generatedQuestions && (
           <div className="space-y-6">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">Generated Questions</h2>
-              <p className="text-slate-400">
-                <span className="font-semibold text-indigo-400">{generatedQuestions.subject}</span> - <span className="font-semibold text-purple-400">{generatedQuestions.topic}</span>
-              </p>
-            </div>
+             <div className="text-center mb-8">
+               <h2 className="text-3xl font-bold mb-2">Generated Questions</h2>
+               <p className="text-slate-400">
+                 <span className="font-semibold text-indigo-400">{generatedQuestions.subject}</span> - 
+                 <span className="font-semibold text-purple-400">{generatedQuestions.topic}</span> | 
+                 <span className="font-semibold text-pink-400">{generatedQuestions.classLevel}</span> | 
+                 <span className="font-semibold text-emerald-400">{generatedQuestions.country}</span>
+               </p>
+             </div>
 
             {/* View Toggle */}
             <div className="flex gap-4 justify-center mb-8">
@@ -242,80 +342,34 @@ function Generate() {
               </div>
             )}
 
-            {/* Marking Scheme View */}
-            {showMarkingScheme && (
-              <div className="space-y-6">
-                <div className="bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/30 rounded-xl p-6">
-                  <h3 className="text-2xl font-bold text-white mb-6">Marking Scheme</h3>
-                  
-                  {generatedQuestions.questions.map((q, index) => (
-                    <div key={q.id} className="mb-8 pb-8 border-b border-slate-700 last:border-b-0 last:mb-0 last:pb-0">
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple-600/30 border border-purple-500/50">
-                            <span className="text-purple-300 font-bold text-sm">{index + 1}</span>
-                          </div>
-                        </div>
-                        <div className="flex-grow">
-                          <h4 className="text-lg font-semibold text-white mb-3">
-                            {q.question}
-                          </h4>
-                          
-                          {q.type === "multiple-choice" && (
-                            <div>
-                              <div className="bg-emerald-600/20 border border-emerald-500/30 rounded-lg p-4 mb-3">
-                                <p className="text-emerald-300 font-semibold">Correct Answer: <span className="text-emerald-200">Option B</span></p>
-                                <p className="text-slate-300 text-sm mt-2">This option accurately represents the primary concept.</p>
-                              </div>
-                              <div className="text-slate-300">
-                                <p className="font-medium mb-2 text-slate-200">Marking Points:</p>
-                                <ul className="list-disc list-inside space-y-1 text-sm text-slate-400">
-                                  <li>Correct answer: 1 mark</li>
-                                  <li>Incorrect or no answer: 0 marks</li>
-                                </ul>
-                              </div>
-                            </div>
-                          )}
-
-                          {q.type === "essay" && (
-                            <div>
-                              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-3">
-                                <p className="text-slate-200 font-medium mb-2">Marking Criteria:</p>
-                                <ul className="space-y-2 text-sm text-slate-300">
-                                  <li><span className="font-medium">Content Accuracy (0-3 marks):</span> How well the student explains the importance</li>
-                                  <li><span className="font-medium">Clarity (0-2 marks):</span> Coherence and organization of thoughts</li>
-                                  <li><span className="font-medium">Examples (0-2 marks):</span> Relevant practical examples provided</li>
-                                  <li><span className="font-medium">Grammar (0-1 mark):</span> Language and presentation</li>
-                                </ul>
-                              </div>
-                              <p className="text-slate-300"><span className="font-medium">Total: 8 marks</span></p>
-                            </div>
-                          )}
-
-                          {q.type === "short-answer" && (
-                            <div>
-                              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-3">
-                                <p className="text-slate-200 font-medium mb-2">Acceptable Answer Key:</p>
-                                <p className="text-slate-300">Students should mention the connection between the concept and real-world scenarios, with specific examples and clear explanation.</p>
-                              </div>
-                              <div className="text-slate-300">
-                                <p className="font-medium mb-2 text-slate-200">Marking Points:</p>
-                                <ul className="list-disc list-inside space-y-1 text-sm text-slate-400">
-                                  <li>Clear relationship identified: 1 mark</li>
-                                  <li>Example provided: 1 mark</li>
-                                  <li>Explanation: 1 mark</li>
-                                  <li>Total: 3 marks</li>
-                                </ul>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+             {/* Marking Scheme View */}
+             {showMarkingScheme && (
+               <div className="space-y-6">
+                 <div className="bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/30 rounded-xl p-6">
+                   <h3 className="text-2xl font-bold text-white mb-6">Marking Scheme</h3>
+                   
+                   {generatedQuestions.questions.map((q, index) => (
+                     <div key={q.id} className="mb-8 pb-8 border-b border-slate-700 last:border-b-0 last:mb-0 last:pb-0">
+                       <div className="flex items-start gap-4">
+                         <div className="flex-shrink-0">
+                           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple-600/30 border border-purple-500/50">
+                             <span className="text-purple-300 font-bold text-sm">{index + 1}</span>
+                           </div>
+                         </div>
+                         <div className="flex-grow">
+                           <h4 className="text-lg font-semibold text-white mb-3">
+                             {q.question}
+                           </h4>
+                           <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                             <p className="text-slate-300 whitespace-pre-line">{q.markingScheme}</p>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   ))}
+                 </div>
+               </div>
+             )}
 
             {/* Export/Download Options */}
             <div className="flex flex-wrap gap-4 justify-center pt-8 border-t border-slate-800">
@@ -351,27 +405,27 @@ function Generate() {
           </div>
         )}
 
-        {/* Empty State */}
-        {!generatedQuestions && !isLoading && (
-          <div className="text-center py-12">
-            <svg
-              className="w-16 h-16 mx-auto mb-4 text-slate-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            <p className="text-slate-400 text-lg">
-              Enter your subject and topic to generate AI-powered questions
-            </p>
-          </div>
-        )}
+         {/* Empty State */}
+         {!generatedQuestions && !isLoading && (
+           <div className="text-center py-12">
+             <svg
+               className="w-16 h-16 mx-auto mb-4 text-slate-600"
+               fill="none"
+               stroke="currentColor"
+               viewBox="0 0 24 24"
+             >
+               <path
+                 strokeLinecap="round"
+                 strokeLinejoin="round"
+                 strokeWidth="1.5"
+                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+               />
+             </svg>
+             <p className="text-slate-400 text-lg">
+               Enter your subject, topic, class level, and country to generate AI-powered questions
+             </p>
+           </div>
+         )}
       </div>
     </main>
   );
