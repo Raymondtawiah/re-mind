@@ -14,12 +14,78 @@ function Generate() {
     brandingLogoPreview: "",
     referenceDiagram: null,
     referenceDiagramPreview: "",
+    provideSpacesForPaper2: true,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [generatedQuestions, setGeneratedQuestions] = useState(null);
   const [showMarkingScheme, setShowMarkingScheme] = useState(false);
+  const [paper2SectionsOpen, setPaper2SectionsOpen] = useState(false);
+  const [brandingOpen, setBrandingOpen] = useState(false);
   const fileInputRef = useRef(null);
   const diagramInputRef = useRef(null);
+
+  const countries = [
+    { value: "Ghana", label: "Ghana" },
+    { value: "Nigeria", label: "Nigeria" },
+    { value: "Sierra Leone", label: "Sierra Leone" },
+    { value: "The Gambia", label: "The Gambia" },
+    { value: "Liberia", label: "Liberia" },
+  ];
+
+  const classLevels = [
+    { value: "Basic 1", label: "Basic 1" },
+    { value: "Basic 2", label: "Basic 2" },
+    { value: "Basic 3", label: "Basic 3" },
+    { value: "Basic 4", label: "Basic 4" },
+    { value: "Basic 5", label: "Basic 5" },
+    { value: "Basic 6", label: "Basic 6" },
+    { value: "Basic 7", label: "Basic 7" },
+    { value: "Basic 8", label: "Basic 8" },
+    { value: "Basic 9", label: "Basic 9" },
+    { value: "SHS 1", label: "SHS 1" },
+    { value: "SHS 2", label: "SHS 2" },
+    { value: "SHS 3", label: "SHS 3" },
+  ];
+
+  const examTypes = [
+    { value: "C.A.T", label: "C.A.T" },
+    { value: "End of Term", label: "End of Term" },
+    { value: "BECE MOCK", label: "BECE MOCK" },
+    { value: "WASSCE MOCK", label: "WASSCE MOCK" },
+  ];
+
+  const difficulties = [
+    { value: "easy", label: "Easy" },
+    { value: "medium", label: "Medium" },
+    { value: "hard", label: "Hard" },
+  ];
+
+  const paperOptions = [
+    { value: "paper_one", label: "Paper 1" },
+    { value: "paper_two", label: "Paper 2" },
+    { value: "both", label: "Both" },
+  ];
+
+  const subjects = [
+    "Mathematics",
+    "English Language",
+    "Science",
+    "Social Studies",
+    "ICT",
+    "R.M.E",
+    "French",
+    "Ghanaian Language",
+    "Creative Arts",
+    "History",
+    "Geography",
+    "Economics",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Government",
+    "Literature",
+    "Elective Maths",
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,58 +139,16 @@ function Generate() {
       alert("Please fill in all required fields.");
       return;
     }
-    if ((formData.paperOption === "paper_two" || formData.paperOption === "both") && !formData.paperTwoTopic.trim()) {
+    if (
+      (formData.paperOption === "paper_two" || formData.paperOption === "both") &&
+      !formData.paperTwoTopic.trim()
+    ) {
       alert("Please enter the specific topic for Paper Two.");
       return;
     }
 
     setIsLoading(true);
-
-    setTimeout(() => {
-      const questions = [];
-      const totalQuestions = Math.max(5, parseInt(formData.numberOfPages) * 3);
-      const qTypes = formData.difficulty === "easy" ? ["multiple-choice"] : formData.difficulty === "medium" ? ["multiple-choice", "short-answer"] : ["multiple-choice", "short-answer", "essay"];
-
-      for (let i = 0; i < totalQuestions; i++) {
-        const type = qTypes[i % qTypes.length];
-        questions.push({
-          id: i + 1,
-          question: `${type === "multiple-choice" ? "MCQ" : type === "essay" ? "Essay" : "Short Answer"} ${i + 1}: Based on ${formData.subject} ${formData.examType} for ${formData.classLevel} students in ${formData.country} (${formData.difficulty} difficulty). ${formData.paperOption !== "paper_one" && i < totalQuestions / 2 ? `Topic: ${formData.paperTwoTopic}. ` : ""}What is the key concept being assessed here?`,
-          type: type,
-          options: type === "multiple-choice" ? ["Option A", "Option B", "Option C", "Option D"] : undefined,
-          markingScheme: type === "multiple-choice"
-            ? `Correct Answer: Option B. This question assesses understanding of key concepts in ${formData.subject} as per the ${formData.country} curriculum for ${formData.classLevel}. Marking: 1 mark for correct answer, 0 for incorrect.`
-            : type === "essay"
-            ? `Marking Criteria:\n- Content Accuracy (0-3 marks): Understanding of ${formData.subject} concepts.\n- Analysis (0-2 marks): Depth of analysis.\n- Examples (0-2 marks): Use of relevant examples.\n- Communication (0-1 mark): Clarity and coherence.\nTotal: 8 marks.`
-            : `Acceptable Answer Key: Students should demonstrate understanding of core ${formData.subject} concepts relevant to ${formData.classLevel} level. Marking: Award marks based on accuracy and completeness of the response. Total: 3 marks.`,
-        });
-      }
-
-      setGeneratedQuestions({
-        subject: formData.subject,
-        topic: formData.paperOption === "paper_one" ? "Paper One" : formData.paperOption === "paper_two" ? `Paper Two: ${formData.paperTwoTopic}` : `Paper One & Paper Two: ${formData.paperTwoTopic}`,
-        classLevel: formData.classLevel,
-        country: formData.country,
-        examType: formData.examType,
-        difficulty: formData.difficulty,
-        paperOption: formData.paperOption,
-        numberOfPages: formData.numberOfPages,
-        brandingLogoPreview: formData.brandingLogoPreview,
-        referenceDiagramPreview: formData.referenceDiagramPreview,
-        questions: questions,
-      });
-      setIsLoading(false);
-    }, 2000);
-  };
-
-  const exportToPDF = () => {
-    if (!generatedQuestions) return;
-    alert("PDF export feature will be implemented with a PDF library like jsPDF or react-pdf");
-  };
-
-  const exportToWord = () => {
-    if (!generatedQuestions) return;
-    alert("Word export feature will be implemented with a Word library like docx");
+    setGeneratedQuestions(null);
   };
 
   const handleGenerateNew = () => {
@@ -143,6 +167,7 @@ function Generate() {
       brandingLogoPreview: "",
       referenceDiagram: null,
       referenceDiagramPreview: "",
+      provideSpacesForPaper2: true,
     });
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -154,184 +179,210 @@ function Generate() {
 
   return (
     <main className="min-h-screen bg-slate-950 text-white pb-24 md:pb-0 pt-20 md:pt-0">
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        {/* Header Section */}
-        <div className="text-center mb-12 pt-8">
-          <h1 className="text-5xl sm:text-6xl font-extrabold mb-4 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="text-center mb-8 pt-8">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             Exam Question Generator
           </h1>
           <p className="text-slate-300 text-lg max-w-2xl mx-auto">
-            Configure your exam settings including country, class, exam type, subject, difficulty level, and paper options to generate curriculum-aligned questions.
+            Configure your exam settings to generate curriculum-aligned questions.
           </p>
         </div>
 
-        {/* Generate Form */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl mb-8">
-          <form onSubmit={handleGenerateQuestions} className="space-y-8">
-            <div className="grid sm:grid-cols-2 gap-8">
-              {/* Country Input */}
+        {!generatedQuestions && !isLoading ? (
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+            <form onSubmit={handleGenerateQuestions} className="space-y-6">
+              {/* Country */}
               <div>
-                <label htmlFor="country" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
                   Country
                 </label>
-                <select
-                  id="country"
-                  name="country"
-                  required
-                  value={formData.country}
-                  onChange={handleChange}
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                >
-                  <option value="">Select Country</option>
-                  <option value="Ghana">Ghana</option>
-                  <option value="Nigeria">Nigeria</option>
-                  <option value="Kenya">Kenya</option>
-                  <option value="South Africa">South Africa</option>
-                  <option value="United Kingdom">United Kingdom</option>
-                  <option value="United States">United States</option>
-                  <option value="Canada">Canada</option>
-                  <option value="Australia">Australia</option>
-                  <option value="India">India</option>
-                  <option value="Other">Other</option>
-                </select>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                  {countries.map((c) => (
+                    <button
+                      key={c.value}
+                      type="button"
+                      onClick={() =>
+                        setFormData((prev) => ({ ...prev, country: c.value }))
+                      }
+                      className={`py-3 rounded-lg text-sm font-semibold border transition-all ${
+                        formData.country === c.value
+                          ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-950/50"
+                          : "bg-slate-950/50 border-slate-700 text-slate-300 hover:border-slate-600"
+                      }`}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+                <input type="hidden" name="country" value={formData.country} required />
               </div>
 
-              {/* Class Level Input */}
-              <div>
-                <label htmlFor="classLevel" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                  Class
-                </label>
-                <select
-                  id="classLevel"
-                  name="classLevel"
-                  required
-                  value={formData.classLevel}
-                  onChange={handleChange}
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                >
-                  <option value="">Select Class</option>
-                  <option value="Primary 1">Primary 1</option>
-                  <option value="Primary 2">Primary 2</option>
-                  <option value="Primary 3">Primary 3</option>
-                  <option value="Primary 4">Primary 4</option>
-                  <option value="Primary 5">Primary 5</option>
-                  <option value="Primary 6">Primary 6</option>
-                  <option value="JHS 1">JHS 1</option>
-                  <option value="JHS 2">JHS 2</option>
-                  <option value="JHS 3">JHS 3</option>
-                  <option value="SHS 1">SHS 1</option>
-                  <option value="SHS 2">SHS 2</option>
-                  <option value="SHS 3">SHS 3</option>
-                  <option value="Year 1">Year 1</option>
-                  <option value="Year 2">Year 2</option>
-                  <option value="Year 3">Year 3</option>
-                  <option value="Year 4">Year 4</option>
-                  <option value="Year 5">Year 5</option>
-                  <option value="Year 6">Year 6</option>
-                  <option value="Grade 1">Grade 1</option>
-                  <option value="Grade 2">Grade 2</option>
-                  <option value="Grade 3">Grade 3</option>
-                  <option value="Grade 4">Grade 4</option>
-                  <option value="Grade 5">Grade 5</option>
-                  <option value="Grade 6">Grade 6</option>
-                  <option value="Grade 7">Grade 7</option>
-                  <option value="Grade 8">Grade 8</option>
-                  <option value="Grade 9">Grade 9</option>
-                  <option value="Grade 10">Grade 10</option>
-                  <option value="Grade 11">Grade 11</option>
-                  <option value="Grade 12">Grade 12</option>
-                </select>
+              <div className="grid sm:grid-cols-2 gap-6">
+                {/* Class Level */}
+                <div>
+                  <label
+                    htmlFor="classLevel"
+                    className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider"
+                  >
+                    Class
+                  </label>
+                  <select
+                    id="classLevel"
+                    name="classLevel"
+                    required
+                    value={formData.classLevel}
+                    onChange={handleChange}
+                    className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  >
+                    <option value="">Select Class</option>
+                    {classLevels.map((cl) => (
+                      <option key={cl.value} value={cl.value}>
+                        {cl.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Curriculum Badge */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                    Curriculum
+                  </label>
+                  <div className="h-[50px] flex items-center">
+                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                      {formData.country === "Ghana" && formData.classLevel.startsWith("Basic")
+                        ? "CCP"
+                        : formData.country === "Ghana" && formData.classLevel.startsWith("SHS")
+                        ? "WASSCE"
+                        : formData.country === "Nigeria"
+                        ? "UBE"
+                        : "Standard"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Exam Type */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                    Exam Type
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {examTypes.map((et) => (
+                      <button
+                        key={et.value}
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({ ...prev, examType: et.value }))
+                        }
+                        className={`py-3 rounded-lg text-sm font-semibold border transition-all ${
+                          formData.examType === et.value
+                            ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-950/50"
+                            : "bg-slate-950/50 border-slate-700 text-slate-300 hover:border-slate-600"
+                        }`}
+                      >
+                        {et.label}
+                      </button>
+                    ))}
+                  </div>
+                  <input type="hidden" name="examType" value={formData.examType} required />
+                </div>
+
+                {/* Subject */}
+                <div>
+                  <label
+                    htmlFor="subject"
+                    className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider"
+                  >
+                    Subject
+                  </label>
+                  <select
+                    id="subject"
+                    name="subject"
+                    required
+                    value={formData.subject}
+                    onChange={handleChange}
+                    className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  >
+                    <option value="">Select Subject</option>
+                    {subjects.map((subj) => (
+                      <option key={subj} value={subj}>
+                        {subj}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Difficulty */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                    Difficulty
+                  </label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {difficulties.map((d) => (
+                      <button
+                        key={d.value}
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({ ...prev, difficulty: d.value }))
+                        }
+                        className={`py-3 rounded-lg text-sm font-semibold border transition-all ${
+                          formData.difficulty === d.value
+                            ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-950/50"
+                            : "bg-slate-950/50 border-slate-700 text-slate-300 hover:border-slate-600"
+                        }`}
+                      >
+                        {d.label}
+                      </button>
+                    ))}
+                  </div>
+                  <input type="hidden" name="difficulty" value={formData.difficulty} required />
+                </div>
+
+                {/* Paper Option */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                    Paper Option
+                  </label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {paperOptions.map((po) => (
+                      <button
+                        key={po.value}
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({ ...prev, paperOption: po.value }))
+                        }
+                        className={`py-3 rounded-lg text-sm font-semibold border transition-all ${
+                          formData.paperOption === po.value
+                            ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-950/50"
+                            : "bg-slate-950/50 border-slate-700 text-slate-300 hover:border-slate-600"
+                        }`}
+                      >
+                        {po.label}
+                      </button>
+                    ))}
+                  </div>
+                  <input type="hidden" name="paperOption" value={formData.paperOption} required />
+                </div>
               </div>
 
-              {/* Exam Type Input */}
-              <div>
-                <label htmlFor="examType" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                  Exam Type
-                </label>
-                <select
-                  id="examType"
-                  name="examType"
-                  required
-                  value={formData.examType}
-                  onChange={handleChange}
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                >
-                  <option value="">Select Exam Type</option>
-                  <option value="C.A.T">C.A.T</option>
-                  <option value="End of Term">End of Term</option>
-                  <option value="BECE MOCK">BECE MOCK</option>
-                  <option value="WASSCE MOCK">WASSCE MOCK</option>
-                </select>
-              </div>
-
-              {/* Subject Input */}
-              <div>
-                <label htmlFor="subject" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  required
-                  value={formData.subject}
-                  onChange={handleChange}
-                  placeholder="e.g., Mathematics, Biology, History"
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                />
-              </div>
-
-              {/* Difficulty Level */}
-              <div>
-                <label htmlFor="difficulty" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                  Difficulty
-                </label>
-                <select
-                  id="difficulty"
-                  name="difficulty"
-                  required
-                  value={formData.difficulty}
-                  onChange={handleChange}
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                >
-                  <option value="">Select Difficulty</option>
-                  <option value="easy">Easy</option>
-                  <option value="medium">Medium</option>
-                  <option value="hard">Hard</option>
-                </select>
-              </div>
-
-              {/* Paper Option */}
-              <div>
-                <label htmlFor="paperOption" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                  Paper Option
-                </label>
-                <select
-                  id="paperOption"
-                  name="paperOption"
-                  required
-                  value={formData.paperOption}
-                  onChange={handleChange}
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                >
-                  <option value="">Select Paper Option</option>
-                  <option value="paper_one">Paper One</option>
-                  <option value="paper_two">Paper Two</option>
-                  <option value="both">Both</option>
-                </select>
-              </div>
-
-              {/* Paper Two Topic (conditional) */}
+              {/* Paper Two Topic */}
               {(formData.paperOption === "paper_two" || formData.paperOption === "both") && (
-                <div className="sm:col-span-2">
-                  <label htmlFor="paperTwoTopic" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                <div>
+                  <label
+                    htmlFor="paperTwoTopic"
+                    className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider"
+                  >
                     Paper Two Specific Topic
                   </label>
                   <input
                     type="text"
                     id="paperTwoTopic"
                     name="paperTwoTopic"
-                    required={formData.paperOption === "paper_two" || formData.paperOption === "both"}
+                    required={
+                      formData.paperOption === "paper_two" || formData.paperOption === "both"
+                    }
                     value={formData.paperTwoTopic}
                     onChange={handleChange}
                     placeholder="e.g., Algebra, Ecology, World War II"
@@ -340,247 +391,315 @@ function Generate() {
                 </div>
               )}
 
-              {/* Number of Pages */}
-              <div>
-                <label htmlFor="numberOfPages" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                  Number of Pages
-                </label>
-                <input
-                  type="number"
-                  id="numberOfPages"
-                  name="numberOfPages"
-                  min="1"
-                  max="20"
-                  required
-                  value={formData.numberOfPages}
-                  onChange={handleChange}
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                />
-              </div>
-
-              {/* Custom Branding / Logo Upload */}
-              <div>
-                <label htmlFor="brandingLogo" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                  Custom Branding (Logo)
-                </label>
-                <input
-                  type="file"
-                  id="brandingLogo"
-                  name="brandingLogo"
-                  accept="image/*"
-                  ref={fileInputRef}
-                  onChange={handleLogoChange}
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500"
-                />
-                {formData.brandingLogoPreview && (
-                  <div className="mt-3">
-                    <img src={formData.brandingLogoPreview} alt="Branding preview" className="h-12 w-auto rounded border border-slate-700" />
-                  </div>
-                )}
-              </div>
-
-              {/* Reference Diagram Upload */}
-              <div>
-                <label htmlFor="referenceDiagram" className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                  Reference Diagram (Optional)
-                </label>
-                <input
-                  type="file"
-                  id="referenceDiagram"
-                  name="referenceDiagram"
-                  accept="image/*"
-                  ref={diagramInputRef}
-                  onChange={handleDiagramChange}
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500"
-                />
-                {formData.referenceDiagramPreview && (
-                  <div className="mt-3">
-                    <img src={formData.referenceDiagramPreview} alt="Reference diagram preview" className="h-24 w-auto rounded border border-slate-700" />
-                  </div>
-                )}
-                <p className="text-xs text-slate-500 mt-2">Upload a diagram or image to guide the AI question generation.</p>
-              </div>
-            </div>
-
-            {/* AI Submit Button */}
-            <div className="flex justify-center pt-6">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="relative group flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:from-slate-600 disabled:to-slate-600 text-white font-semibold shadow-xl shadow-indigo-950/50 transition-all transform hover:-translate-y-1 disabled:translate-y-0 disabled:opacity-75"
-              >
-                <svg
-                  className={`w-6 h-6 transition-transform ${isLoading ? "animate-spin" : "group-hover:scale-110"}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
-                <span>{isLoading ? "Generating..." : "Generate Questions"}</span>
-              </button>
-            </div>
-          </form>
-        </div>
-
-        {/* Generated Questions Display */}
-        {generatedQuestions && (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">Generated Questions</h2>
-              <p className="text-slate-400">
-                <span className="font-semibold text-indigo-400">{generatedQuestions.subject}</span> -
-                <span className="font-semibold text-purple-400">{generatedQuestions.examType}</span> |
-                <span className="font-semibold text-pink-400">{generatedQuestions.classLevel}</span> |
-                <span className="font-semibold text-emerald-400">{generatedQuestions.country}</span> |
-                <span className="font-semibold text-amber-400">{generatedQuestions.difficulty.charAt(0).toUpperCase() + generatedQuestions.difficulty.slice(1)}</span> |
-                <span className="font-semibold text-sky-400">{generatedQuestions.paperOption === "paper_one" ? "Paper One" : generatedQuestions.paperOption === "paper_two" ? "Paper Two" : "Both Papers"}</span> |
-                <span className="font-semibold text-slate-300">{generatedQuestions.numberOfPages} Page(s)</span>
-              </p>
-            </div>
-
-            {/* Branding Header */}
-            {generatedQuestions.brandingLogoPreview && (
-              <div className="text-center mb-6">
-                <img src={generatedQuestions.brandingLogoPreview} alt="Branding Logo" className="h-16 w-auto mx-auto rounded border border-slate-700" />
-              </div>
-            )}
-
-            {/* Reference Diagram */}
-            {generatedQuestions.referenceDiagramPreview && (
-              <div className="text-center mb-6">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Reference Diagram</p>
-                <img src={generatedQuestions.referenceDiagramPreview} alt="Reference Diagram" className="max-h-40 w-auto mx-auto rounded border border-slate-700" />
-              </div>
-            )}
-
-            {/* View Toggle */}
-            <div className="flex gap-4 justify-center mb-8">
-              <button
-                onClick={() => setShowMarkingScheme(false)}
-                className={`px-6 py-2 rounded-lg font-medium transition-all ${
-                  !showMarkingScheme
-                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-950/50"
-                    : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                }`}
-              >
-                Questions
-              </button>
-              <button
-                onClick={() => setShowMarkingScheme(true)}
-                className={`px-6 py-2 rounded-lg font-medium transition-all ${
-                  showMarkingScheme
-                    ? "bg-purple-600 text-white shadow-lg shadow-purple-950/50"
-                    : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                }`}
-              >
-                Marking Scheme
-              </button>
-            </div>
-
-            {/* Questions View */}
-            {!showMarkingScheme && (
-              <div className="space-y-6">
-                {generatedQuestions.questions.map((q, index) => (
-                  <div
-                    key={q.id}
-                    className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-slate-700 transition-all"
+              {/* Paper 2 Structure Details */}
+              {(formData.paperOption === "paper_two" || formData.paperOption === "both") && (
+                <div className="border border-slate-800 rounded-xl overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setPaper2SectionsOpen((prev) => !prev)}
+                    className="w-full flex items-center justify-between px-6 py-4 bg-slate-900/50 hover:bg-slate-900 transition-colors"
                   >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600/20 border border-indigo-500/30">
-                          <span className="text-indigo-400 font-bold text-sm">{index + 1}</span>
-                        </div>
+                    <span className="text-sm font-semibold text-slate-300 uppercase tracking-wider">
+                      Paper 2 Structure Details
+                    </span>
+                    <svg
+                      className={`w-5 h-5 text-slate-400 transition-transform ${paper2SectionsOpen ? "rotate-180" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {paper2SectionsOpen && (
+                    <div className="p-6 space-y-6 border-t border-slate-800">
+                      <div className="flex items-center gap-3">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                          Standard Objective Format
+                        </span>
                       </div>
-                      <div className="flex-grow">
-                        <div className="flex items-center gap-3 mb-3">
-                          <h3 className="text-lg font-semibold text-white flex-grow">
-                            {q.question}
-                          </h3>
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                            {q.type === "multiple-choice"
-                              ? "MCQ"
-                              : q.type === "essay"
-                              ? "Essay"
-                              : "Short Answer"}
-                          </span>
-                        </div>
 
-                        {q.type === "multiple-choice" && q.options && (
-                          <div className="space-y-2 ml-2">
-                            {q.options.map((option, optIndex) => (
-                              <div
-                                key={optIndex}
-                                className="flex items-center gap-3 p-2 rounded-lg bg-slate-950/50 border border-slate-800 hover:border-slate-700 transition-all cursor-pointer"
-                              >
-                                <input
-                                  type="radio"
-                                  name={`question-${q.id}`}
-                                  className="w-4 h-4 cursor-pointer"
-                                  disabled
-                                />
-                                <label className="flex-grow cursor-pointer text-slate-300">
-                                  {option}
-                                </label>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
-                        {(q.type === "essay" || q.type === "short-answer") && (
-                          <textarea
-                            rows="3"
-                            disabled
-                            placeholder="Student answer space..."
-                            className="w-full mt-3 bg-slate-950/50 border border-slate-800 rounded-lg px-4 py-3 text-slate-500 placeholder-slate-600 focus:outline-none resize-none"
+                      <div className="grid sm:grid-cols-2 gap-6">
+                        <div>
+                          <label
+                            htmlFor="numberOfPages"
+                            className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider"
+                          >
+                            Number of Pages
+                          </label>
+                          <input
+                            type="number"
+                            id="numberOfPages"
+                            name="numberOfPages"
+                            min="1"
+                            max="20"
+                            required
+                            value={formData.numberOfPages}
+                            onChange={handleChange}
+                            className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                           />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                        </div>
 
-            {/* Marking Scheme View */}
-            {showMarkingScheme && (
-              <div className="space-y-6">
-                <div className="bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/30 rounded-xl p-6">
-                  <h3 className="text-2xl font-bold text-white mb-6">Marking Scheme</h3>
-
-                  {generatedQuestions.questions.map((q, index) => (
-                    <div key={q.id} className="mb-8 pb-8 border-b border-slate-700 last:border-b-0 last:mb-0 last:pb-0">
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple-600/30 border border-purple-500/50">
-                            <span className="text-purple-300 font-bold text-sm">{index + 1}</span>
+                        <div>
+                          <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                            Provide spaces for Paper 2 answers
+                          </label>
+                          <div className="flex items-center gap-3 h-[50px]">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  provideSpacesForPaper2: !prev.provideSpacesForPaper2,
+                                }))
+                              }
+                              className={`relative w-12 h-6 rounded-full transition-colors ${
+                                formData.provideSpacesForPaper2 !== false
+                                  ? "bg-indigo-600"
+                                  : "bg-slate-700"
+                              }`}
+                            >
+                              <span
+                                className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                                  formData.provideSpacesForPaper2 !== false
+                                    ? "translate-x-6"
+                                    : "translate-x-0"
+                                }`}
+                              />
+                            </button>
                           </div>
                         </div>
-                        <div className="flex-grow">
-                          <h4 className="text-lg font-semibold text-white mb-3">
-                            {q.question}
-                          </h4>
-                          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-                            <p className="text-slate-300 whitespace-pre-line">{q.markingScheme}</p>
-                          </div>
-                        </div>
                       </div>
                     </div>
-                  ))}
+                  )}
+                </div>
+              )}
+
+              {/* Reference Documents */}
+              <div>
+                <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                  Reference Documents
+                </label>
+                <div className="border-2 border-dashed border-slate-700 rounded-xl p-6 text-center hover:border-slate-600 transition-colors">
+                  <p className="text-slate-400 text-sm mb-3">Upload PDF, DOC, DOCX, or TXT files</p>
+                  <input
+                    type="file"
+                    multiple
+                    accept=".pdf,.doc,.docx,.txt"
+                    className="hidden"
+                    id="refDocs"
+                  />
+                  <label
+                    htmlFor="refDocs"
+                    className="inline-flex items-center px-4 py-2 rounded-lg bg-slate-800 text-slate-300 text-sm font-medium border border-slate-700 cursor-pointer hover:bg-slate-700 transition-colors"
+                  >
+                    Choose Files
+                  </label>
                 </div>
               </div>
-            )}
+
+              {/* Custom Branding */}
+              <div className="border border-slate-800 rounded-xl overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setBrandingOpen((prev) => !prev)}
+                  className="w-full flex items-center justify-between px-6 py-4 bg-slate-900/50 hover:bg-slate-900 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm font-semibold text-slate-300 uppercase tracking-wider">
+                      Custom Branding
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                      PREMIUM
+                    </span>
+                  </div>
+                  <svg
+                    className={`w-5 h-5 text-slate-400 transition-transform ${brandingOpen ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {brandingOpen && (
+                  <div className="p-6 space-y-4 border-t border-slate-800">
+                    <div>
+                      <label
+                        htmlFor="schoolName"
+                        className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider"
+                      >
+                        School / Organization Name
+                      </label>
+                      <input
+                        type="text"
+                        id="schoolName"
+                        name="schoolName"
+                        value={formData.schoolName || ""}
+                        onChange={handleChange}
+                        placeholder="Enter school name"
+                        className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="brandingLogo"
+                        className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider"
+                      >
+                        School Logo
+                      </label>
+                      <input
+                        type="file"
+                        id="brandingLogo"
+                        name="brandingLogo"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={handleLogoChange}
+                        className="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500"
+                      />
+                      {formData.brandingLogoPreview && (
+                        <div className="mt-3">
+                          <img
+                            src={formData.brandingLogoPreview}
+                            alt="Branding preview"
+                            className="h-12 w-auto rounded border border-slate-700"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Reference Diagrams */}
+              {(formData.paperOption === "paper_two" || formData.paperOption === "both") && (
+                <div>
+                  <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+                    Reference Diagrams
+                  </label>
+                  <div className="border-2 border-dashed border-slate-700 rounded-xl p-6 text-center hover:border-slate-600 transition-colors">
+                    <p className="text-slate-400 text-sm mb-3">Upload diagrams or images to guide generation</p>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      className="hidden"
+                      id="refDiagrams"
+                      ref={diagramInputRef}
+                      onChange={handleDiagramChange}
+                    />
+                    <label
+                      htmlFor="refDiagrams"
+                      className="inline-flex items-center px-4 py-2 rounded-lg bg-slate-800 text-slate-300 text-sm font-medium border border-slate-700 cursor-pointer hover:bg-slate-700 transition-colors"
+                    >
+                      Upload Images
+                    </label>
+                  </div>
+                  {formData.referenceDiagramPreview && (
+                    <div className="mt-4">
+                      <img
+                        src={formData.referenceDiagramPreview}
+                        alt="Reference diagram preview"
+                        className="h-24 w-auto rounded border border-slate-700"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Generate Button */}
+              <div className="flex justify-center pt-4">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="relative group flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:from-slate-600 disabled:to-slate-600 text-white font-semibold shadow-xl shadow-indigo-950/50 transition-all transform hover:-translate-y-1 disabled:translate-y-0 disabled:opacity-75"
+                >
+                  <svg
+                    className={`w-6 h-6 transition-transform ${isLoading ? "animate-spin" : "group-hover:scale-110"}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                  <span>{isLoading ? "Generating..." : "Generate paper"}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        ) : null}
+
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex flex-col items-center justify-center py-20">
+            <svg
+              className="w-16 h-16 text-indigo-500 animate-spin mb-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+              />
+            </svg>
+            <p className="text-slate-300 text-lg font-medium">Generating your exam paper...</p>
+          </div>
+        )}
+
+        {/* Generated Questions Display */}
+        {generatedQuestions && !isLoading && (
+          <div className="space-y-6">
+            {/* Paper Header */}
+            <div className="bg-white text-slate-900 rounded-2xl shadow-2xl overflow-hidden">
+              <div className="flex items-center justify-between px-8 py-6 border-b border-slate-200">
+                <div className="flex items-center gap-4">
+                  <img
+                    src="/logo.png"
+                    alt="Re-Mind"
+                    className="h-14 w-14 object-contain"
+                  />
+                  <div>
+                    <h2 className="text-2xl font-bold text-slate-900">
+                      {formData.subject || "Subject"}
+                    </h2>
+                    <p className="text-slate-600 text-sm font-medium">
+                      {formData.examType || "Exam Type"} • {formData.classLevel || "Class"} • {formData.country || "Country"}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Time</p>
+                  <p className="text-lg font-bold text-slate-900">2 hrs</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Placeholder for AI generated content */}
+            <div className="min-h-[300px] bg-slate-900 border border-slate-800 rounded-2xl p-8 flex items-center justify-center">
+              <p className="text-slate-400 text-lg">
+                AI-generated questions will appear here.
+              </p>
+            </div>
 
             {/* Export/Download Options */}
             <div className="flex flex-wrap gap-4 justify-center pt-8 border-t border-slate-800">
               <button
-                onClick={exportToPDF}
+                onClick={() => alert("PDF export feature will be implemented with a PDF library like jsPDF or react-pdf")}
                 className="flex items-center gap-2 px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-all transform hover:-translate-y-0.5"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -589,7 +708,7 @@ function Generate() {
                 Download as PDF
               </button>
               <button
-                onClick={exportToWord}
+                onClick={() => alert("Word export feature will be implemented with a Word library like docx")}
                 className="flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium transition-all transform hover:-translate-y-0.5"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
